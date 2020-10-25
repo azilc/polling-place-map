@@ -1,32 +1,39 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <InfoPanel class="panel" />
+    <MapPanel class="panel" />
   </div>
 </template>
 
-<style>
+<script>
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import InfoPanel from '@/components/InfoPanel.vue';
+import MapPanel from '@/components/MapPanel.vue';
+
+export default {
+  components: {
+    InfoPanel,
+    MapPanel,
+  },
+};
+</script>
+
+<style scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
 }
 
-#nav {
-  padding: 30px;
-}
+@media (min-width: 992px) {
+  #app {
+    flex-direction: row;
+    height: 100vh;
+  }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  .panel {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
 }
 </style>
