@@ -38,7 +38,6 @@ export default {
     );
 
     map.on('load', this.mapDidLoad);
-    map.on('click', (e) => { console.log() });
     map.on('click', 'precincts', this.handleMapClick);
   },
   computed: {
