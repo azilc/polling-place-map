@@ -199,11 +199,15 @@ export default {
     },
     resultsSummaryText() {
       const { locations, selectedLocationType } = this;
-      const selectedLocationTypePretty = selectedLocationType.replace(/-/g, ' ');
+      let selectedLocationTypePretty = selectedLocationType.replace(/-/g, ' ');
       const count = locations.length;
 
       if (count === 0) {
         return `Sorry, we couldn't find any ${selectedLocationTypePretty} for your precinct.`;
+      }
+
+      if (count === 1) {
+        selectedLocationTypePretty = selectedLocationTypePretty.replace(/s$/, '');
       }
 
       return `We found ${count} ${selectedLocationTypePretty}.`;
