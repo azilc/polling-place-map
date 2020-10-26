@@ -37,8 +37,17 @@ export default {
       }),
     );
 
+    // check if this is an iframe
+    let isIframe;
+    try {
+      isIframe = (window.self !== window.top);
+    } catch (e) {
+      isIframe = true;
+    }
+    this.isIframe = isIframe;
+
     map.on('load', this.mapDidLoad);
-    map.on('click', 'precincts', this.handleMapClick);
+    map.on('click', this.handleMapClick);
   },
   computed: {
     selectedPoint() {
@@ -176,11 +185,12 @@ export default {
       });
       bounds.extend(this.selectedPointMarker.getLngLat());
 
-      // set padding based on small screen vs large
-      const padding = window.screen.width < 992 ? 50 : 200;
-      this.map.fitBounds(bounds, {
-        padding,
-      });
+      // HACK it's hard (if not impossible) to get the dimensions of the iframe
+      // because of cross-origin frame restrictions. but, conveniently, all of
+      // the sites this is currently embedded on set the iframe width to less
+      // than 992, so we can assume a more mobile-ish viewport.
+      const padding = (this.isIframe || window.screen.width < 992) ? 100 : 200;
+      this.map.fitBounds(bounds, { padding });
     },
   },
 };
