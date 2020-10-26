@@ -99,7 +99,7 @@
       />
 
       <ul class="list-group">
-        <li v-for="location in locations"
+        <li v-for="location in locationsSortedByDistance"
             :key="location.id"
             class="list-group-item"
         >
@@ -149,6 +149,8 @@
 </template>
 
 <script>
+import { getDistance } from 'geolib';
+
 export default {
   computed: {
     selectedPoint() {
@@ -165,6 +167,35 @@ export default {
     },
     locations() {
       return this.$store.getters.locationsForSelectedType;
+    },
+    locationsSortedByDistance() {
+      const { locations, selectedPoint } = this;
+      const locationsSorted = [...locations];
+
+      locationsSorted.sort((a, b) => {
+        const distA = getDistance(selectedPoint, {
+          lat: a.fields.Latitude,
+          lng: a.fields.Longitude,
+        });
+        const distB = getDistance(selectedPoint, {
+          lat: b.fields.Latitude,
+          lng: b.fields.Longitude,
+        });
+
+        let order;
+
+        if (distB < distA) {
+          order = 1;
+        } else if (distA < distB) {
+          order = -1;
+        } else {
+          order = 0;
+        }
+
+        return order;
+      });
+
+      return locationsSorted;
     },
     resultsSummaryText() {
       const { locations, selectedLocationType } = this;
