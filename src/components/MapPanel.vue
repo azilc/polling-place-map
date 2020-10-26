@@ -53,14 +53,8 @@ export default {
     selectedPoint() {
       return this.$store.state.selectedPoint;
     },
-    precinctId() {
-      return this.$store.state.precinctId;
-    },
-    selectedLocationType() {
-      return this.$store.state.selectedLocationType;
-    },
-    locationsFetchStatus() {
-      return this.$store.state.locations.status;
+    locations() {
+      return this.$store.getters.locationsForSelectedType;
     },
   },
   watch: {
@@ -76,14 +70,8 @@ export default {
         this.selectedPointMarker.setLngLat(nextSelectedPoint);
       }
     },
-    selectedLocationType() {
+    locations() {
       this.updateLocationMarkers();
-    },
-    locationsFetchStatus(nextStatus) {
-      // TODO maybe a little hacky/indirect?
-      if (nextStatus === 'success') {
-        this.updateLocationMarkers();
-      }
     },
   },
   methods: {
@@ -106,7 +94,7 @@ export default {
       });
     },
     handleMapClick(e) {
-      // console.log('handle map click', e, e.features);
+      // console.log('handle map click', e);
 
       // HACK ignore marker clicks
       const isMarkerClick = e.originalEvent.target.tagName !== 'CANVAS';
@@ -115,7 +103,39 @@ export default {
       const { lngLat } = e;
       this.$store.commit('setSelectedPoint', lngLat);
 
-      const countyPrecinctId = e.features[0].properties.prec_code;
+      const features = this.map.queryRenderedFeatures(e.point);
+      const precinctFeatures = features.filter((feature) => {
+        return feature.source === 'precincts';
+      });
+
+      // handle no precincts returned
+      if (precinctFeatures.length < 1) {
+        this.$store.commit('setPrecinct', null);
+        this.$store.commit(
+          'setPrecinctError',
+          'no-precincts',
+        );
+        this.$store.dispatch('handlePrecinctSelect', null);
+        return;
+      }
+
+      // handle multiple precincts returned
+      if (precinctFeatures.length > 1) {
+        this.$store.commit('setPrecinct', null);
+        this.$store.commit(
+          'setPrecinctError',
+          'multiple-precincts',
+        );
+        this.$store.dispatch('handlePrecinctSelect', null);
+        return;
+      }
+
+      // if we're still here, reset selected precinct error
+      this.$store.commit('setPrecinctError', null);
+
+      // update precinct object in state
+      const precinctFeature = precinctFeatures[0];
+      const countyPrecinctId = precinctFeature.properties.prec_code;
       // TODO edge cases? make sure we only split on space before numeric (regex?)
       const [county, precinctIdLeadingZero] = countyPrecinctId.replace('AZ_', '').split('_');
       const precinctId = precinctIdLeadingZero.replace(/^0/, '');
@@ -136,34 +156,22 @@ export default {
       }
 
       // display new markers
-      const { selectedLocationType } = this;
-
-      // TODO this is a little hacky
-      const LOCATION_TYPE_BUTTON_ID_MAP = {
-        'polling-places': 'Polling Place',
-        'early-voting-locations': 'Early Voting Location',
-        'drop-boxes': 'Drop Box',
-        'emergency-voting-locations': 'Emergency Voting Location',
-      };
-      const locationTypePretty = LOCATION_TYPE_BUTTON_ID_MAP[selectedLocationType];
-
-      // const selectedLocationTypeCamel = toCamel(selectedLocationType);
-      const nextLocations = this.$store.getters.locationsForType(locationTypePretty);
+      const { locations } = this;
 
       // if there are no new locations, just stop
-      if (nextLocations.length === 0) {
+      if (locations.length === 0) {
         return;
       }
 
-      const nextLocationMarkers = [];
+      const locationMarkers = [];
 
-      nextLocations.forEach((nextLocation) => {
-        const lng = nextLocation.fields.Longitude;
-        const lat = nextLocation.fields.Latitude;
+      locations.forEach((location) => {
+        const lng = location.fields.Longitude;
+        const lat = location.fields.Latitude;
 
         // create popup
         const popup = new mapboxgl.Popup({ offset: 25 })
-          .setText(nextLocation.fields.Name);
+          .setText(location.fields.Name);
 
         const marker = new mapboxgl.Marker({
           color: 'blue',
@@ -172,16 +180,16 @@ export default {
           .setPopup(popup)
           .addTo(this.map);
 
-        nextLocationMarkers.push(marker);
+        locationMarkers.push(marker);
       });
 
-      this.locationMarkers = nextLocationMarkers;
+      this.locationMarkers = locationMarkers;
 
       // zoom to bounds
       // adapted from https://stackoverflow.com/a/35715102/676001
       const bounds = new mapboxgl.LngLatBounds();
-      nextLocationMarkers.forEach((nextLocationMarker) => {
-        bounds.extend(nextLocationMarker.getLngLat());
+      locationMarkers.forEach((locationMarker) => {
+        bounds.extend(locationMarker.getLngLat());
       });
       bounds.extend(this.selectedPointMarker.getLngLat());
 

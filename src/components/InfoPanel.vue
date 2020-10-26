@@ -1,12 +1,32 @@
 <template>
   <div id="info-panel">
-    <div v-if="!precinct"
+    <div v-if="!selectedPoint && !precinct"
          class="welcome"
     >
       <h1>Find your voting locations</h1>
       <p>
         To get started, click on the map as close as possible to where you are registered to vote.
       </p>
+    </div>
+
+    <!-- error: user clicked map but no precinct found -->
+    <div v-if="precinctError === 'no-precincts' && !precinct">
+      <h2>
+        It looks like that location is outside Arizona.
+      </h2>
+
+      <div class="alert alert-primary" role="alert">
+        Are you a voter from another state? Find your polling places <a href="https://www.google.com/search?q=where+do+i+vote">here</a>.
+      </div>
+    </div>
+
+    <!-- error: user clicked map and multiple precincts were found
+    (rare edge case/data quality issue) -->
+    <div v-if="selectedPoint === 'multiple-precincts' && !precinct">
+      <h2>
+        Oops! We ran into an issue getting precincts for that location. Please 
+        try again.
+      </h2>
     </div>
 
     <div class="results" v-if="precinct">
@@ -131,22 +151,20 @@
 <script>
 export default {
   computed: {
+    selectedPoint() {
+      return this.$store.state.selectedPoint;
+    },
     precinct() {
-      return this.$store.state.selectedPrecinct;
+      return this.$store.state.precinct;
+    },
+    precinctError() {
+      return this.$store.state.precinctError;
     },
     selectedLocationType() {
       return this.$store.state.selectedLocationType;
     },
     locations() {
-      const LOCATIONS_STATE_KEY_MAP = {
-        'polling-places': 'Polling Place',
-        'early-voting-locations': 'Early Voting Location',
-        'drop-boxes': 'Drop Box',
-        'emergency-voting-locations': 'Emergency Voting Location',
-      };
-      const stateKey = LOCATIONS_STATE_KEY_MAP[this.selectedLocationType];
-
-      return this.$store.getters.locationsForType(stateKey);
+      return this.$store.getters.locationsForSelectedType;
     },
     resultsSummaryText() {
       const { locations, selectedLocationType } = this;

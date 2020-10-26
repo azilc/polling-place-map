@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     selectedPoint: null,
-    selectedPrecinct: null,
+    precinct: null,
+    precinctError: null,
     selectedLocationType: 'early-voting-locations',
     locations: {
       status: null,
@@ -18,7 +19,10 @@ export default new Vuex.Store({
       state.selectedPoint = point;
     },
     setPrecinct(state, precinct) {
-      state.selectedPrecinct = precinct;
+      state.precinct = precinct;
+    },
+    setPrecinctError(state, error) {
+      state.precinctError = error;
     },
     setLocationsFetchStatus(state, status) {
       state.locations.status = status;
@@ -32,6 +36,15 @@ export default new Vuex.Store({
   },
   actions: {
     async handlePrecinctSelect({ commit }, precinct) {
+      // if no precinct was passed in, there was some issue (e.g. they clicked
+      // outside az or multiple precincts returned) so clear everything out
+      if (!precinct) {
+        commit('setLocationsFetchStatus', null);
+        commit('setLocationsData', []);
+        commit('setPrecinct', null);
+        return;
+      }
+
       commit('setLocationsFetchStatus', 'loading');
 
       const { county, precinctId } = precinct;
@@ -58,9 +71,20 @@ export default new Vuex.Store({
     },
   },
   getters: {
-    locationsForType: (state) => (locationType) => {
+    locationsForSelectedType(state) {
+      const { selectedLocationType } = state;
+
+      const LOCATION_TYPES_PRETTY_MAP = {
+        'polling-places': 'Polling Place',
+        'early-voting-locations': 'Early Voting Location',
+        'drop-boxes': 'Drop Box',
+        'emergency-voting-locations': 'Emergency Voting Location',
+      };
+
+      const selectedLocationTypePretty = LOCATION_TYPES_PRETTY_MAP[selectedLocationType];
+
       return state.locations.data.filter((location) => {
-        return location.fields['Location Type'] === locationType;
+        return location.fields['Location Type'] === selectedLocationTypePretty;
       });
     },
   },
