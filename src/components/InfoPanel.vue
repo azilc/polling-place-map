@@ -12,7 +12,7 @@
     <!-- error: user clicked map but no precinct found -->
     <div v-if="precinctError === 'no-precincts' && !precinct">
       <h2>
-        It looks like that location is outside Arizona.
+        You've selected a location outside Arizona.
       </h2>
 
       <div class="alert alert-primary" role="alert">
@@ -130,11 +130,12 @@
       </ul>
     </div>
 
-    <h2>About this tool</h2>
-    <p>
-      This tool is to help people find out where and when they are able to vote. The data is provided by the ASU Indian Legal Clinic and is kept as up-to-date as possible. If in doubt, call your county elections office. It is not a voter registration tool. If you want to check your voter registration or register to vote, go to the AZ Secretary of State's site <a href="https://my.arizona.vote/WhereToVote.aspx?s=individual">here</a>.
-    </p>
     <hr>
+    <h3>About this tool</h3>
+    <p class="small">
+      This tool is to help people find out where and when they are able to vote. The data is provided by the ASU Law Indian Legal Clinic and is kept as up-to-date as possible. If in doubt, call your county elections office. It is not a voter registration tool. If you want to check your voter registration or register to vote, go to the AZ Secretary of State's site <a href="https://my.arizona.vote/WhereToVote.aspx?s=individual">here</a>.
+    </p>
+    <br/>
     <p class="small">
       This tool collects non-personally-identifying information of the sort that
       web browsers and servers typically make available, such as the browser
