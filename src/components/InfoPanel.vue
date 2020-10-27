@@ -122,7 +122,7 @@
           </div>
           <div>
             <!-- TODO handle null lat/lng? -->
-            <a :href="`https://www.google.com/maps/search/?api=1&query=${location.fields['Latitude']},${location.fields['Longitude']}`" target="_blank">
+            <a :href="`https://www.google.com/maps/dir/?api=1&destination=${location.fields['Latitude']},${location.fields['Longitude']}`" target="_blank">
               Open in Google Maps
             </a>
           </div>
