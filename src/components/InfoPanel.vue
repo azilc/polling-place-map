@@ -43,7 +43,7 @@
 
       <hr>
 
-      <p><strong>What kind of voting location are you looking for?</strong>Ballots you received by mail can be</p>
+      <p><strong>What kind of voting location are you looking for?</strong></p>
       <div class="btn-group-toggle btn-group-vertical" data-toggle="buttons">
         <label class="btn btn-primary active"
         >
