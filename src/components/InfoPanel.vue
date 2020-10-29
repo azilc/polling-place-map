@@ -114,12 +114,17 @@
             {{ location.fields['City'] }}, AZ
             {{ location.fields['ZIP Code'] }}
           </div>
+          < br/>
+          <div class="font-weight-light">
+            Hours:
+          </div>
           <div>
             {{ location.fields['Dates'] }}
           </div>
           <div>
             {{ location.fields['Hours'] }}
           </div>
+          <br />
           <div>
             <!-- TODO handle null lat/lng? -->
             <a :href="`https://www.google.com/maps/search/?api=1&query=${location.fields['Latitude']},${location.fields['Longitude']}`" target="_blank">
