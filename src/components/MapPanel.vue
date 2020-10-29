@@ -33,6 +33,7 @@ export default {
     map.addControl(
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
+        placeholder: 'Search for a nearby town',
         mapboxgl,
       }),
     );
