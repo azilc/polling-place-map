@@ -218,14 +218,38 @@ export default {
       let html = '';
 
       if (selectedLocationType === 'polling-places') {
-        html = 'All Election Day Voting Locations will be open from 6AM to 7PM on Tuesday, November 3. As long as you are in line before 7PM, you will still be able to vote. Voter identification is required to vote in person. More information <a href="https://azsos.gov/elections/voting-election">here</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
+        html = `
+          All Election Day Voting Locations will be open from 6AM to 7PM on Tuesday, November 3. 
+          As long as you are in line before 7PM, you will still be able to vote. 
+          Voter identification is required to vote in person. 
+          More information <a href="https://azsos.gov/elections/voting-election">here</a>.
+          <hr />
+          At these locations, you can also drop off the ballot you received by mail.
+        `;
       } else if (selectedLocationType === 'early-voting-locations') {
-        html = 'Early voting runs until 5PM Friday, October 30. Dates and hours vary by location. Voter identification is required to vote in person. More information <a href="https://azsos.gov/elections/voting-election">here</a>. <hr />At these locations, you can also drop off the ballot you received by mail. Look at Emergency Voting locations for voting options from 5PM Friday, October 30, to 5PM Monday, November 2.';
+        html = `
+          Early voting runs until 5PM Friday, October 30. Dates and hours vary by location. 
+          Voter identification is required to vote in person. 
+          More information <a href="https://azsos.gov/elections/voting-election">here</a>.
+          <hr />
+          At these locations, you can also drop off the ballot you received by mail.
+          Look at Emergency Voting Locations for voting options from 5PM Friday, October 30, to 5PM Monday, November 2.
+        `;
       } else if (selectedLocationType === 'drop-boxes') {
-        html = 'If you have received a ballot by mail, you can use any drop box in the county of your voter registration until 7PM Tuesday, November 3 (Election Day). If you cannot mail your ballot back by October 27, it is recommended that you drop it off.
-<hr />In addition to the options below, ALL voting locations when open will accept the ballot you received by mail. Early Voting Locations have options until 5PM Friday, October 30. Emergency Voting Locations have options from 5PM Friday, October 30 to 5PM Monday, November 2. Election Day Voting Locations are all open from 6AM - 7PM on Tuesday, November 3.';
+        html = `
+          If you have received a ballot by mail, you can use any drop box in the county of your voter registration until 7PM Tuesday, November 3 (Election Day). If you cannot mail your ballot back by October 27, it is recommended that you drop it off.
+          <hr />
+          In addition to the options below, ALL voting locations when open will accept the ballot you received by mail. Early Voting Locations have options until 5PM Friday, October 30. Emergency Voting Locations have options from 5PM Friday, October 30 to 5PM Monday, November 2. Election Day Voting Locations are all open from 6AM - 7PM on Tuesday, November 3.
+        `;
       } else if (selectedLocationType === 'emergency-voting-locations') {
-        html = 'Emergeny Voting is available from 5PM Friday, October 30 to 5PM Monday, November 2. It is for those who are unable to vote early or on Election Day. Dates and hours vary by location. Voter identification is required to vote in person. More information <a href="https://azsos.gov/elections/voting-election">here</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
+        html = `
+          Emergency Voting is available from 5PM Friday, October 30 to 5PM Monday, November 2.
+          It is for those who are unable to vote early or on Election Day.
+          Dates and hours vary by location. Voter identification is required to vote in person.
+          More information <a href="https://azsos.gov/elections/voting-election">here</a>.
+          <hr />
+          At these locations, you can also drop off the ballot you received by mail.
+        `;
       }
 
       return html;
