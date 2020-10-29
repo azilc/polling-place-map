@@ -52,6 +52,11 @@ export default new Vuex.Store({
       const locationsUrl = new URL('https://api.airtable.com/v0/appT1HFWoS3zL6giD/Locations');
       locationsUrl.search = new URLSearchParams({
         filterByFormula: `AND({Latitude} != BLANK(), {Longitude} != BLANK(), {County} = "${county}", OR({Precinct Number} = "${precinctId}", {Precinct Number} = "All"), {Active} = 1)`,
+        // TODO/HACK this is a workaround of sorts for airtable only returning
+        // 100 records at a time. we want to prioritize rows that are on tribal
+        // land.
+        'sort[0][field]': 'Tribal Land',
+        'sort[0][direction]': 'desc',
       });
       const locationsRes = await fetch(locationsUrl, {
         headers: {
