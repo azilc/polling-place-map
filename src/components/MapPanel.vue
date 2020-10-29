@@ -34,6 +34,9 @@ export default {
       new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         placeholder: 'Search for a nearby town',
+        marker: {
+          color: '#505050',
+        },
         mapboxgl,
       }),
     );
