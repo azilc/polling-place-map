@@ -45,16 +45,6 @@
 
       <p><strong>What kind of voting location are you looking for?</strong></p>
       <div class="btn-group-toggle btn-group-vertical" data-toggle="buttons">
-        <label class="btn btn-primary"
-        >
-          <input type="radio"
-                 name="options"
-                 id="drop-boxes"
-                 autocomplete="off"
-                 @click="handleLocationTypeSelect"
-          >
-          Ballot Drop Boxes
-        </label>
         <label class="btn btn-primary active"
         >
           <input type="radio"
@@ -64,6 +54,16 @@
                  @click="handleLocationTypeSelect"
           >
           Early Voting Locations
+        </label>
+        <label class="btn btn-primary"
+        >
+          <input type="radio"
+                 name="options"
+                 id="drop-boxes"
+                 autocomplete="off"
+                 @click="handleLocationTypeSelect"
+          >
+          Ballot Drop Boxes
         </label>
         <label class="btn btn-primary"
         >
@@ -218,38 +218,13 @@ export default {
       let html = '';
 
       if (selectedLocationType === 'polling-places') {
-        html = `
-          All Election Day Voting Locations will be open from 6AM to 7PM on Tuesday, November 3. 
-          As long as you are in line before 7PM, you will still be able to vote. 
-          Voter identification is required to vote in person. 
-          More information <a href="https://azsos.gov/elections/voting-election">here</a>.
-          <hr />
-          At these locations, you can also drop off the ballot you received by mail.
-        `;
+        html = 'Vote in-person on Election Day: Tuesday, November 3 from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
       } else if (selectedLocationType === 'early-voting-locations') {
-        html = `
-          Early voting runs until 5PM Friday, October 30. Dates and hours vary by location. 
-          Voter identification is required to vote in person. 
-          More information <a href="https://azsos.gov/elections/voting-election">here</a>.
-          <hr />
-          At these locations, you can also drop off the ballot you received by mail.
-          Look at Emergency Voting Locations for voting options from 5PM Friday, October 30, to 5PM Monday, November 2.
-        `;
+        html = 'Early voting: Vote in-person from Tuesday, October 6, to Friday, October 30 — check location for dates and times. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
       } else if (selectedLocationType === 'drop-boxes') {
-        html = `
-          If you have received a ballot by mail, you can use any drop box in the county of your voter registration until 7PM Tuesday, November 3 (Election Day). If you cannot mail your ballot back by October 27, it is recommended that you drop it off.
-          <hr />
-          In addition to the options below, ALL voting locations when open will accept the ballot you received by mail. Early Voting Locations have options until 5PM Friday, October 30. Emergency Voting Locations have options from 5PM Friday, October 30 to 5PM Monday, November 2. Election Day Voting Locations are all open from 6AM - 7PM on Tuesday, November 3.
-        `;
+        html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 3). You can also return them to any in-person voting locations during their open hours.';
       } else if (selectedLocationType === 'emergency-voting-locations') {
-        html = `
-          Emergency Voting is available from 5PM Friday, October 30 to 5PM Monday, November 2.
-          It is for those who are unable to vote early or on Election Day.
-          Dates and hours vary by location. Voter identification is required to vote in person.
-          More information <a href="https://azsos.gov/elections/voting-election">here</a>.
-          <hr />
-          At these locations, you can also drop off the ballot you received by mail.
-        `;
+        html = 'Between Friday, October 30, to Monday, November 2, you can vote at one of these emergency voting locations if something unexpected happens and you are no longer able to vote on Election Day. Voter identification is required. Find out more about  <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
       }
 
       return html;
