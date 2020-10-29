@@ -104,7 +104,7 @@
             class="list-group-item"
         >
           <h4>{{ location.fields['Polling Location Name'] }}</h4>
-          <div>
+          <div style="padding-bottom:0.5rem">
             <div>
               <strong>
                 {{ location.fields['Name'] }}
@@ -114,17 +114,15 @@
             {{ location.fields['City'] }}, AZ
             {{ location.fields['ZIP Code'] }}
           </div>
-          <br>
           <div class="font-weight-light">
             Hours:
           </div>
           <div>
             {{ location.fields['Dates'] }}
           </div>
-          <div>
+          <div style="padding-bottom:0.5rem">
             {{ location.fields['Hours'] }}
           </div>
-          <br>
           <div>
             <!-- TODO handle null lat/lng? -->
             <a :href="`https://www.google.com/maps/search/?api=1&query=${location.fields['Latitude']},${location.fields['Longitude']}`" target="_blank">
@@ -223,7 +221,7 @@ export default {
       let html = '';
 
       if (selectedLocationType === 'polling-places') {
-        html = 'Day-of voting: Election day is Tuesday, November 3. All polling locations will be open from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. You will need to bring a form of ID to vote in person. More information <a href="https://azsos.gov/elections/voting-election">here</a>. At these locations, you can also drop off the ballot you received by mail.';
+      html = 'Day-of voting: Election day is Tuesday, November 3. All polling locations will be open from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. You will need to bring a form of ID to vote in person. More information <a href="https://azsos.gov/elections/voting-election">here</a>. At these locations, you can also drop off the ballot you received by mail.';
       } else if (selectedLocationType === 'early-voting-locations') {
         html = 'Early voting: Early voting in Arizona runs from Tuesday, October 6, to Friday, October 30. Dates and hours vary by location. Voter identification is required to vote in person. More information <a href="https://azsos.gov/elections/voting-election">here</a>. At these locations, you can also drop off the ballot you received by mail.';
       } else if (selectedLocationType === 'drop-boxes') {
