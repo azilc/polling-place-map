@@ -35,7 +35,7 @@ export default {
         accessToken: mapboxgl.accessToken,
         placeholder: 'Search for a nearby town',
         marker: {
-          color: '#bababa',
+          color: '#505050',
         },
         mapboxgl,
       }),
