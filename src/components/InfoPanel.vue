@@ -45,6 +45,17 @@
 
       <p><strong>What kind of voting location are you looking for?</strong></p>
       <div class="btn-group-toggle btn-group-vertical" data-toggle="buttons">
+        <label class="btn btn-primary active"
+        >
+          <input type="radio"
+                 name="options"
+                 id="polling-places"
+                 autocomplete="off"
+                 @click="handleLocationTypeSelect"
+                 checked
+          >
+          Election Day Voting Locations
+        </label>
         <label class="btn btn-primary"
         >
           <input type="radio"
@@ -55,16 +66,6 @@
           >
           Ballot Drop Boxes
         </label>
-        <label class="btn btn-primary active"
-        >
-          <input type="radio"
-                 name="options"
-                 id="early-voting-locations"
-                 autocomplete="off"
-                 @click="handleLocationTypeSelect"
-          >
-          Early Voting Locations
-        </label>
         <label class="btn btn-primary"
         >
           <input type="radio"
@@ -74,17 +75,6 @@
                  @click="handleLocationTypeSelect"
           >
           Emergency Voting Locations
-        </label>
-        <label class="btn btn-primary"
-        >
-          <input type="radio"
-                 name="options"
-                 id="polling-places"
-                 autocomplete="off"
-                 @click="handleLocationTypeSelect"
-                 checked
-          >
-          Election Day Voting Locations
         </label>
       </div>
 
