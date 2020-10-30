@@ -91,6 +91,13 @@ export default {
   },
   watch: {
     selectedPoint(nextSelectedPoint) {
+      // if we're unsetting the current selected point
+      if (!nextSelectedPoint) {
+        this.selectedPointMarker.remove();
+        this.selectedPointMarker = null;
+        return;
+      }
+
       // create the selected point marker if we don't have one already
       if (!this.selectedPointMarker) {
         this.selectedPointMarker = new mapboxgl.Marker({
@@ -243,6 +250,11 @@ export default {
     },
     didSearchWithGeocoder(e) {
       this.shouldShowGeocoderHelpText = true;
+
+      // reset selected point and precinct data, in case there is one
+      // TODO this is a bit hacky
+      this.$store.commit('setSelectedPoint', null);
+      this.$store.dispatch('handlePrecinctSelect', null);
     },
   },
 };
