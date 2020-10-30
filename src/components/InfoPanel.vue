@@ -3,7 +3,7 @@
     <div v-if="!selectedPoint && !precinct"
          class="welcome"
     >
-      <h1>Find your voting locations</h1>
+      <h1>Find your voting location for the US General Election</h1>
       <p>
         To get started, click on the map as close as possible to where you are registered to vote.
       </p>
