@@ -134,7 +134,7 @@
 
     <h3>About this tool</h3>
     <p class="small">
-      This is not a voter registration tool. It is to help people find out where and when they are able to vote. The data is provided by the ASU Law Indian Legal Clinic and is kept as up-to-date as possible. If in doubt, call your county elections office. If you want to check your voter registration or register to vote, go to the AZ Secretary of State's site <a href="https://my.arizona.vote/WhereToVote.aspx?s=individual">here</a>.
+      This is not a voter registration tool. It is also not a way to find out where to vote in Tribal Elections. This tool is to help people find out where and when they are able to vote for the US General Election. The data is provided by the ASU Law Indian Legal Clinic and is kept as up-to-date as possible. If in doubt, call your county elections office. If you want to check your voter registration, go to the <a href="https://my.arizona.vote/WhereToVote.aspx?s=individual">AZ Secretary of State's site</a>.
     </p>
     <p class="small">
       This tool collects non-personally-identifying information of the sort that
