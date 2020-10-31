@@ -12,6 +12,11 @@ import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 mapboxgl.accessToken = 'pk.eyJ1IjoiYXpuYXRpdmV2b3RlZXAiLCJhIjoiY2tmb25uNXVuMDF0dDJxbzd1YnA1c3MxcyJ9.TWEc5QMg1YV6LHCn5lP9dw';
 
 export default {
+  data() {
+    return {
+      shouldShowGeocoderHelpText: false,
+    };
+  },
   mounted() {
     // set initial zoom (small screen vs large)
     const zoom = window.screen.width < 992 ? 3 : 6;
@@ -30,16 +35,39 @@ export default {
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
     // add geocoder
-    map.addControl(
-      new MapboxGeocoder({
-        accessToken: mapboxgl.accessToken,
-        placeholder: 'Search for a nearby town',
-        marker: {
-          color: '#505050',
-        },
-        mapboxgl,
-      }),
-    );
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      placeholder: 'Search for a nearby town',
+      marker: false,
+      mapboxgl,
+    }).on('result', this.didSearchWithGeocoder);
+    map.addControl(geocoder);
+
+    // add geocoding help text
+    // TODO this was a last minute add and could probably be made more elegant/
+    // vue-like
+    class GeocoderHelpTextControl {
+      onAdd(map) {
+        this._map = map;
+        this._container = document.createElement('div');
+        this._container.className = 'mapboxgl-ctrl geocoder-help-text bg-warning';
+        this._container.textContent = 'Now click the map to see polling places';
+
+        this._container.style.display = 'none';
+        this._container.style.padding = '10px';
+        this._container.style.['font-size'] = '1rem';
+
+        return this._container;
+      }
+
+      onRemove() {
+        this._container.parentNode.removeChild(this._container);
+        this._map = undefined;
+      }
+    }
+
+    const geocoderHelpTextControl = new GeocoderHelpTextControl();
+    map.addControl(geocoderHelpTextControl);
 
     // check if this is an iframe
     let isIframe;
@@ -63,6 +91,13 @@ export default {
   },
   watch: {
     selectedPoint(nextSelectedPoint) {
+      // if we're unsetting the current selected point
+      if (!nextSelectedPoint) {
+        this.selectedPointMarker.remove();
+        this.selectedPointMarker = null;
+        return;
+      }
+
       // create the selected point marker if we don't have one already
       if (!this.selectedPointMarker) {
         this.selectedPointMarker = new mapboxgl.Marker({
@@ -76,6 +111,10 @@ export default {
     },
     locations() {
       this.updateLocationMarkers();
+    },
+    shouldShowGeocoderHelpText(nextShouldShowGeocoderHelpText) {
+      const nextDisplay = nextShouldShowGeocoderHelpText ? 'block' : 'none';
+      document.querySelector('.geocoder-help-text').style.display = nextDisplay;
     },
   },
   methods: {
@@ -148,6 +187,11 @@ export default {
         precinctId,
       };
       this.$store.dispatch('handlePrecinctSelect', precinct);
+
+      // hide geocoder help text if it's showing
+      if (this.shouldShowGeocoderHelpText) {
+        this.shouldShowGeocoderHelpText = false;
+      }
     },
     updateLocationMarkers() {
       // remove existing markers
@@ -203,6 +247,14 @@ export default {
       // than 992, so we can assume a more mobile-ish viewport.
       const padding = (this.isIframe || window.screen.width < 992) ? 100 : 200;
       this.map.fitBounds(bounds, { padding });
+    },
+    didSearchWithGeocoder(e) {
+      this.shouldShowGeocoderHelpText = true;
+
+      // reset selected point and precinct data, in case there is one
+      // TODO this is a bit hacky
+      this.$store.commit('setSelectedPoint', null);
+      this.$store.dispatch('handlePrecinctSelect', null);
     },
   },
 };
