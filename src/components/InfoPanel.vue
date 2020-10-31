@@ -224,7 +224,17 @@ export default {
       } else if (selectedLocationType === 'drop-boxes') {
         html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 3). You can also return them to any in-person voting locations during hours they are open.';
       } else if (selectedLocationType === 'emergency-voting-locations') {
-        html = 'Between Friday, October 30, to Monday, November 2, you can vote at one of these emergency voting locations if something unexpected happens and you're no longer going to be able to vote on Election Day. Voter identification is required. Find out more about  <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
+        html = `
+          Between Friday, October 30, to Monday, November 2, you can vote at
+          one of these emergency voting locations if something unexpected
+          happens and you're no longer going to be able to vote on Election Day.
+          Voter identification is required. Find out more about 
+          <a href="https://azsos.gov/elections/voting-election">what you need to
+          bring to vote in person</a>.
+          <hr />
+          At these locations, you can also drop off the ballot you received by
+          mail.
+        `;
       }
 
       return html;
