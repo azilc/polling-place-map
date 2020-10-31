@@ -260,6 +260,16 @@ export default {
 };
 </script>
 
+<style>
+/* 
+  Overrride the size of Search placeholder text.
+  Otherwise it will be 18px for screens liss wide than 640px.
+*/
+#map-panel.panel.mapboxgl-map .mapboxgl-ctrl-geocoder.mapboxgl-ctrl .mapboxgl-ctrl-geocoder--input {
+  font-size: 15px;
+}
+</style>
+
 <style scoped>
 #map-panel {
   height: 400px;
