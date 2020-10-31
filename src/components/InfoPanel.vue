@@ -3,7 +3,7 @@
     <div v-if="!selectedPoint && !precinct"
          class="welcome"
     >
-      <h1>Find your voting locations</h1>
+      <h1>Find your voting location for the US General Election</h1>
       <p>
         To get started, click on the map as close as possible to where you are registered to vote.
       </p>
@@ -49,6 +49,17 @@
         >
           <input type="radio"
                  name="options"
+                 id="polling-places"
+                 autocomplete="off"
+                 @click="handleLocationTypeSelect"
+                 checked
+          >
+          Election Day Voting Locations
+        </label>
+        <label class="btn btn-primary"
+        >
+          <input type="radio"
+                 name="options"
                  id="early-voting-locations"
                  autocomplete="off"
                  @click="handleLocationTypeSelect"
@@ -74,17 +85,6 @@
                  @click="handleLocationTypeSelect"
           >
           Emergency Voting Locations
-        </label>
-        <label class="btn btn-primary"
-        >
-          <input type="radio"
-                 name="options"
-                 id="polling-places"
-                 autocomplete="off"
-                 @click="handleLocationTypeSelect"
-                 checked
-          >
-          Election Day Voting Locations
         </label>
       </div>
 
@@ -134,7 +134,7 @@
 
     <h3>About this tool</h3>
     <p class="small">
-      This is not a voter registration tool. It is to help people find out where and when they are able to vote. The data is provided by the ASU Law Indian Legal Clinic and is kept as up-to-date as possible. If in doubt, call your county elections office. If you want to check your voter registration or register to vote, go to the AZ Secretary of State's site <a href="https://my.arizona.vote/WhereToVote.aspx?s=individual">here</a>.
+      This is not a voter registration tool. It is also not a way to find out where to vote in Tribal Elections. This tool is to help people find out where and when they are able to vote for the US General Election. The data is provided by the ASU Law Indian Legal Clinic and is kept as up-to-date as possible. If in doubt, call your county elections office. If you want to check your voter registration, go to the <a href="https://my.arizona.vote/WhereToVote.aspx?s=individual">AZ Secretary of State's site</a>.
     </p>
     <p class="small">
       This tool collects non-personally-identifying information of the sort that
@@ -220,11 +220,21 @@ export default {
       if (selectedLocationType === 'polling-places') {
         html = 'Vote in-person on Election Day: Tuesday, November 3 from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
       } else if (selectedLocationType === 'early-voting-locations') {
-        html = 'Early voting: Vote in-person from Tuesday, October 6, to Friday, October 30 — check location for dates and times. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
+        html = 'Early voting has ended. For in-person voting options from 5:00 PM, Friday, October 30 to 7:00 PM Monday, November 2, look at Emergency Voting Locations. Election Day is Tuesday, November 3.';
       } else if (selectedLocationType === 'drop-boxes') {
-        html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 3). You can also return them to any in-person voting locations during their open hours.';
+        html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 3). You can also return them to any in-person voting locations during hours they are open.';
       } else if (selectedLocationType === 'emergency-voting-locations') {
-        html = 'Between Friday, October 30, to Monday, November 2, you can vote at one of these emergency voting locations if something unexpected happens and you are no longer able to vote on Election Day. Voter identification is required. Find out more about  <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
+        html = `
+          Between Friday, October 30, to Monday, November 2, you can vote at
+          one of these emergency voting locations if something unexpected
+          happens and you're no longer going to be able to vote on Election Day.
+          Voter identification is required. Find out more about 
+          <a href="https://azsos.gov/elections/voting-election">what you need to
+          bring to vote in person</a>.
+          <hr />
+          At these locations, you can also drop off the ballot you received by
+          mail.
+        `;
       }
 
       return html;

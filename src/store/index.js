@@ -8,7 +8,7 @@ export default new Vuex.Store({
     selectedPoint: null,
     precinct: null,
     precinctError: null,
-    selectedLocationType: 'early-voting-locations',
+    selectedLocationType: 'polling-places',
     locations: {
       status: null,
       data: [],
