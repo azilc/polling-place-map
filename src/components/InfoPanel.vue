@@ -218,14 +218,14 @@ export default {
       let html = '';
 
       if (selectedLocationType === 'polling-places') {
-        html = 'Vote in-person on Election Day: Tuesday, November 3 from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
+        html = 'Vote in-person on Election Day: Tuesday, November 8 from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
       } else if (selectedLocationType === 'early-voting-locations') {
-        html = 'Early voting has ended. For in-person voting options from 5:00 PM, Friday, October 30 to 7:00 PM Monday, November 2, look at Emergency Voting Locations. Election Day is Tuesday, November 3.';
+        html = 'Early voting ends on Friday, November 4.';
       } else if (selectedLocationType === 'drop-boxes') {
-        html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 3). You can also return them to any in-person voting locations during hours they are open.';
+        html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 8). You can also return them to any in-person voting locations during hours they are open.';
       } else if (selectedLocationType === 'emergency-voting-locations') {
         html = `
-          Between Friday, October 30, to Monday, November 2, you can vote at
+          Between Friday, November 4, to Monday, November 8, you can vote at
           one of these emergency voting locations if something unexpected
           happens and you're no longer going to be able to vote on Election Day.
           Voter identification is required. Find out more about 
