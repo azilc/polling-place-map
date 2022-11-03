@@ -1,15 +1,15 @@
 <template>
-  <div id="map-panel">
-  </div>
+  <div id="map-panel"></div>
 </template>
 
 <script>
-import mapboxgl from 'mapbox-gl';
-import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
+import mapboxgl from "mapbox-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
-mapboxgl.accessToken = 'pk.eyJ1IjoiYXpuYXRpdmV2b3RlZXAiLCJhIjoiY2tmb25uNXVuMDF0dDJxbzd1YnA1c3MxcyJ9.TWEc5QMg1YV6LHCn5lP9dw';
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiYXpuYXRpdmV2b3RlZXAiLCJhIjoiY2tmb25uNXVuMDF0dDJxbzd1YnA1c3MxcyJ9.TWEc5QMg1YV6LHCn5lP9dw";
 
 export default {
   data() {
@@ -22,8 +22,8 @@ export default {
     const zoom = window.screen.width < 992 ? 3 : 6;
 
     const map = new mapboxgl.Map({
-      container: 'map-panel',
-      style: 'mapbox://styles/mapbox/streets-v11',
+      container: "map-panel",
+      style: "mapbox://styles/mapbox/streets-v11",
       center: [-111.8869546, 34.1715142],
       zoom,
       minZoom: 5,
@@ -32,15 +32,15 @@ export default {
     this.map = map;
 
     // add zoom/pan controls
-    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+    map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
 
     // add geocoder
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
-      placeholder: 'Search for a nearby town',
+      placeholder: "Search for a nearby town",
       marker: false,
       mapboxgl,
-    }).on('result', this.didSearchWithGeocoder);
+    }).on("result", this.didSearchWithGeocoder);
     map.addControl(geocoder);
 
     // add geocoding help text
@@ -49,13 +49,13 @@ export default {
     class GeocoderHelpTextControl {
       onAdd(map) {
         this._map = map;
-        this._container = document.createElement('div');
-        this._container.className = 'mapboxgl-ctrl geocoder-help-text bg-warning';
-        this._container.textContent = 'Now click the map to see polling places';
+        this._container = document.createElement("div");
+        this._container.className = "mapboxgl-ctrl geocoder-help-text bg-warning";
+        this._container.textContent = "Now click the map to see polling places";
 
-        this._container.style.display = 'none';
-        this._container.style.padding = '10px';
-        this._container.style['font-size'] = '1rem';
+        this._container.style.display = "none";
+        this._container.style.padding = "10px";
+        this._container.style["font-size"] = "1rem";
 
         return this._container;
       }
@@ -72,14 +72,14 @@ export default {
     // check if this is an iframe
     let isIframe;
     try {
-      isIframe = (window.self !== window.top);
+      isIframe = window.self !== window.top;
     } catch (e) {
       isIframe = true;
     }
     this.isIframe = isIframe;
 
-    map.on('load', this.mapDidLoad);
-    map.on('click', this.handleMapClick);
+    map.on("load", this.mapDidLoad);
+    map.on("click", this.handleMapClick);
   },
   computed: {
     selectedPoint() {
@@ -101,7 +101,7 @@ export default {
       // create the selected point marker if we don't have one already
       if (!this.selectedPointMarker) {
         this.selectedPointMarker = new mapboxgl.Marker({
-          color: 'red',
+          color: "red",
         })
           .setLngLat(nextSelectedPoint)
           .addTo(this.map);
@@ -113,26 +113,26 @@ export default {
       this.updateLocationMarkers();
     },
     shouldShowGeocoderHelpText(nextShouldShowGeocoderHelpText) {
-      const nextDisplay = nextShouldShowGeocoderHelpText ? 'block' : 'none';
-      document.querySelector('.geocoder-help-text').style.display = nextDisplay;
+      const nextDisplay = nextShouldShowGeocoderHelpText ? "block" : "none";
+      document.querySelector(".geocoder-help-text").style.display = nextDisplay;
     },
   },
   methods: {
     mapDidLoad() {
       const { map } = this;
 
-      map.addSource('precincts', {
-        type: 'vector',
-        url: 'mapbox://aznativevoteep.5bddfpzc',
+      map.addSource("precincts", {
+        type: "vector",
+        url: "mapbox://aznativevoteep.4dkcr32a",
       });
       map.addLayer({
-        id: 'precincts',
-        type: 'fill',
-        source: 'precincts',
-        'source-layer': 'az_precincts',
+        id: "precincts",
+        type: "fill",
+        source: "precincts",
+        "source-layer": "az_precincts",
         paint: {
-          'fill-outline-color': 'rgba(0, 0, 255, 0)',
-          'fill-color': 'rgba(0, 0, 255, 0)',
+          "fill-outline-color": "rgba(0, 0, 255, 0)",
+          "fill-color": "rgba(0, 0, 255, 0)",
         },
       });
     },
@@ -140,53 +140,47 @@ export default {
       // console.log('handle map click', e);
 
       // HACK ignore marker clicks
-      const isMarkerClick = e.originalEvent.target.tagName !== 'CANVAS';
+      const isMarkerClick = e.originalEvent.target.tagName !== "CANVAS";
       if (isMarkerClick) return;
 
       const { lngLat } = e;
-      this.$store.commit('setSelectedPoint', lngLat);
+      this.$store.commit("setSelectedPoint", lngLat);
 
       const features = this.map.queryRenderedFeatures(e.point);
       const precinctFeatures = features.filter((feature) => {
-        return feature.source === 'precincts';
+        return feature.source === "precincts";
       });
 
       // handle no precincts returned
       if (precinctFeatures.length < 1) {
-        this.$store.commit('setPrecinct', null);
-        this.$store.commit(
-          'setPrecinctError',
-          'no-precincts',
-        );
-        this.$store.dispatch('handlePrecinctSelect', null);
+        this.$store.commit("setPrecinct", null);
+        this.$store.commit("setPrecinctError", "no-precincts");
+        this.$store.dispatch("handlePrecinctSelect", null);
         return;
       }
 
       // handle multiple precincts returned
       if (precinctFeatures.length > 1) {
-        this.$store.commit('setPrecinct', null);
-        this.$store.commit(
-          'setPrecinctError',
-          'multiple-precincts',
-        );
-        this.$store.dispatch('handlePrecinctSelect', null);
+        this.$store.commit("setPrecinct", null);
+        this.$store.commit("setPrecinctError", "multiple-precincts");
+        this.$store.dispatch("handlePrecinctSelect", null);
         return;
       }
 
       // if we're still here, reset selected precinct error
-      this.$store.commit('setPrecinctError', null);
+      this.$store.commit("setPrecinctError", null);
 
       // update precinct object in state
       const precinctFeature = precinctFeatures[0];
       const countyPrecinctId = precinctFeature.properties.prec_code;
       // TODO edge cases? make sure we only split on space before numeric (regex?)
-      const [county, precinctIdLeadingZero] = countyPrecinctId.replace('AZ_', '').split('_');
-      const precinctId = precinctIdLeadingZero.replace(/^0/, '');
+      const [county, precinctIdLeadingZero] = countyPrecinctId.replace("AZ_", "").split("_");
+      const precinctId = precinctIdLeadingZero.replace(/^0/, "");
       const precinct = {
         county,
         precinctId,
       };
-      this.$store.dispatch('handlePrecinctSelect', precinct);
+      this.$store.dispatch("handlePrecinctSelect", precinct);
 
       // hide geocoder help text if it's showing
       if (this.shouldShowGeocoderHelpText) {
@@ -218,11 +212,10 @@ export default {
         const lat = location.fields.Latitude;
 
         // create popup
-        const popup = new mapboxgl.Popup({ offset: 25 })
-          .setText(location.fields.Name);
+        const popup = new mapboxgl.Popup({ offset: 25 }).setText(location.fields.Name);
 
         const marker = new mapboxgl.Marker({
-          color: 'blue',
+          color: "blue",
         })
           .setLngLat({ lng, lat })
           .setPopup(popup)
@@ -245,7 +238,7 @@ export default {
       // because of cross-origin frame restrictions. but, conveniently, all of
       // the sites this is currently embedded on set the iframe width to less
       // than 992, so we can assume a more mobile-ish viewport.
-      const padding = (this.isIframe || window.screen.width < 992) ? 100 : 200;
+      const padding = this.isIframe || window.screen.width < 992 ? 100 : 200;
       this.map.fitBounds(bounds, { padding });
     },
     didSearchWithGeocoder(e) {
@@ -253,8 +246,8 @@ export default {
 
       // reset selected point and precinct data, in case there is one
       // TODO this is a bit hacky
-      this.$store.commit('setSelectedPoint', null);
-      this.$store.dispatch('handlePrecinctSelect', null);
+      this.$store.commit("setSelectedPoint", null);
+      this.$store.dispatch("handlePrecinctSelect", null);
     },
   },
 };
