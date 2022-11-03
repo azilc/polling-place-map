@@ -55,7 +55,7 @@ export default {
 
         this._container.style.display = 'none';
         this._container.style.padding = '10px';
-        this._container.style.['font-size'] = '1rem';
+        this._container.style['font-size'] = '1rem';
 
         return this._container;
       }
