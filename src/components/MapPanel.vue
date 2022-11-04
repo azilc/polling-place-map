@@ -123,7 +123,7 @@ export default {
 
       map.addSource("precincts", {
         type: "vector",
-        url: "mapbox://aznativevoteep.4dkcr32a",
+        url: "mapbox://aznativevoteep.btrrgab8",
       });
       map.addLayer({
         id: "precincts",
