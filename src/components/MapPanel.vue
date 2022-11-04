@@ -55,7 +55,7 @@ export default {
 
         this._container.style.display = 'none';
         this._container.style.padding = '10px';
-        this._container.style.['font-size'] = '1rem';
+        this._container.style['font-size'] = '1rem';
 
         return this._container;
       }
@@ -123,7 +123,7 @@ export default {
 
       map.addSource('precincts', {
         type: 'vector',
-        url: 'mapbox://aznativevoteep.5bddfpzc',
+        url: 'mapbox://aznativevoteep.btrrgab8',
       });
       map.addLayer({
         id: 'precincts',
