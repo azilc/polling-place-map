@@ -220,12 +220,12 @@ export default {
       if (selectedLocationType === 'polling-places') {
         html = 'Vote in-person on Election Day: Tuesday, November 8 from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
       } else if (selectedLocationType === 'early-voting-locations') {
-        html = 'Early voting ends on Friday, November 4.';
+        html = 'Early voting ends has ended. If you cannot vote on November 8, you can vote on November 7 at an Emergency Voting Location.';
       } else if (selectedLocationType === 'drop-boxes') {
         html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 8). You can also return them to any in-person voting locations during hours they are open.';
       } else if (selectedLocationType === 'emergency-voting-locations') {
         html = `
-          Between Friday, November 4, to Monday, November 8, you can vote at
+          On Monday, November 7, you can vote at
           one of these emergency voting locations if something unexpected
           happens and you're no longer going to be able to vote on Election Day.
           Voter identification is required. Find out more about 
@@ -236,7 +236,6 @@ export default {
           mail.
         `;
       }
-
       return html;
     },
   },
