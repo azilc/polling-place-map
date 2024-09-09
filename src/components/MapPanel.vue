@@ -123,7 +123,7 @@ export default {
 
       map.addSource('precincts', {
         type: 'vector',
-        url: 'mapbox://aznativevoteep.btrrgab8',
+        url: 'mapbox://aznativevoteep.2hi2fi60',
       });
       map.addLayer({
         id: 'precincts',
@@ -178,10 +178,8 @@ export default {
 
       // update precinct object in state
       const precinctFeature = precinctFeatures[0];
-      const countyPrecinctId = precinctFeature.properties.prec_code;
-      // TODO edge cases? make sure we only split on space before numeric (regex?)
-      const [county, precinctIdLeadingZero] = countyPrecinctId.replace('AZ_', '').split('_');
-      const precinctId = precinctIdLeadingZero.replace(/^0/, '');
+      const precinctId = precinctFeature.properties.precinct?.toString().replace(/^0/, '') || 'All';
+      const county = precinctFeature.properties.county;     
       const precinct = {
         county,
         precinctId,
