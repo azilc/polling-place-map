@@ -31,7 +31,7 @@
 
     <div class="results" v-if="precinct">
       <h2>
-        You selected {{ precinct.county }} County, Precinct {{ precinct.precinctId }}
+        You selected {{ precinct.county }} County<span v-if="precinct.precinctId !== 'All'">, Precinct {{ precinct.precinctId }}</span>
       </h2>
       <p>
         <em>
