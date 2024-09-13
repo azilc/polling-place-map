@@ -2,13 +2,18 @@
 
 A polling place locator for Arizona's Indian Country, supporting voters without standard addresses
 
-This project is a collaboration between the Arizona State University [Indian Legal Clinic](https://law.asu.edu/experiences/clinics/indian-legal) and the [U.S. Digital Response](https://www.usdigitalresponse.org/).
+This project is a collaboration between the Arizona State University [Indian Legal Clinic](https://law.asu.edu/experiences/clinics/indian-legal) and [U.S. Digital Response](https://www.usdigitalresponse.org/).
 
 ![Screenshot](/screenshot.png?raw=true "Screenshot")
 
 ## Project setup
 ```
 yarn install
+```
+
+Then create an .env.local file in the root directory and replace "YOUR_TOKEN" with a [personal access token](https://airtable.com/developers/web/guides/personal-access-tokens) that has the `data.records:read` scope.
+```
+VUE_APP_AIRTABLE_BEARER_TOKEN=YOUR_TOKEN
 ```
 
 ### Compiles and hot-reloads for development

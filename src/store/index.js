@@ -61,7 +61,7 @@ export default new Vuex.Store({
       // airtable only returns 100 records per query, so do this in a loop
       /* eslint-disable no-await-in-loop */
       do {
-        const locationsUrl = new URL('https://api.airtable.com/v0/appT1HFWoS3zL6giD/tblUsOXRKwYNmOmxo');
+        const locationsUrl = new URL(`https://api.airtable.com/v0/appT1HFWoS3zL6giD/${process.env.VUE_APP_LOCATIONS_TABLE}`);
         const locationUrlParams = {
           filterByFormula: `AND({Latitude} != BLANK(), {Longitude} != BLANK(), {County} = "${county}", OR({Precinct Number} = "${precinctId}", {Precinct Number} = "All"), {Active} = 1)`,
         };
@@ -76,9 +76,7 @@ export default new Vuex.Store({
 
         const locationsRes = await fetch(locationsUrl, {
           headers: {
-            // note: this key is for a dummy, read-only airtable user
-            // sorry, hackers :P
-            Authorization: 'Bearer keyuJB9Hqg3p2tuCI',
+            Authorization: `Bearer ${process.env.VUE_APP_AIRTABLE_BEARER_TOKEN}`,
           },
         });
         const sourceLocationsData = await locationsRes.json();
