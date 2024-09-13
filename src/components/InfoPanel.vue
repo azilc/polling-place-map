@@ -103,7 +103,7 @@
             :key="location.id"
             class="list-group-item"
         >
-          <h4>{{ location.fields['Name'] }}</h4>
+          <h4 :id="location.fields['Pseudo ID'].trim()">{{ location.fields['Name'] }}</h4>
           <div>
             {{ location.fields['Street Address'] }}            
           </div>

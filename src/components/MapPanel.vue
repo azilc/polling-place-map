@@ -215,9 +215,9 @@ export default {
         const lng = location.fields.Longitude;
         const lat = location.fields.Latitude;
 
-        // create popup
+        // create popup        
         const popup = new mapboxgl.Popup({ offset: 25 })
-          .setText(location.fields.Name);
+          .setHTML(`<strong>${location.fields.Name}<strong><br><a href="#${location.fields['Pseudo ID'].trim()}">get directions & hours</a>`);
 
         const marker = new mapboxgl.Marker({
           color: 'blue',
