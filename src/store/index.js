@@ -3,6 +3,13 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+const LOCATION_TYPES_PRETTY_MAP = {
+  'polling-places': 'Polling Place',
+  'early-voting-locations': 'Early Voting Location',
+  'drop-boxes': 'Drop Box',
+  'emergency-voting-locations': 'Emergency Voting Location',
+};
+
 export default new Vuex.Store({
   state: {
     selectedPoint: null,
@@ -89,19 +96,21 @@ export default new Vuex.Store({
   getters: {
     locationsForSelectedType(state) {
       const { selectedLocationType } = state;
-
-      const LOCATION_TYPES_PRETTY_MAP = {
-        'polling-places': 'Polling Place',
-        'early-voting-locations': 'Early Voting Location',
-        'drop-boxes': 'Drop Box',
-        'emergency-voting-locations': 'Emergency Voting Location',
-      };
-
       const selectedLocationTypePretty = LOCATION_TYPES_PRETTY_MAP[selectedLocationType];
 
       return state.locations.data.filter((location) => {
         return location.fields['Location Type'] === selectedLocationTypePretty;
       });
+    },
+    locationCounts(state) {
+      const counts = {};
+      for (const type in LOCATION_TYPES_PRETTY_MAP) {
+        const typedLocations = state.locations.data.filter((location) => {
+          return location.fields['Location Type'] === LOCATION_TYPES_PRETTY_MAP[type];
+        });
+        counts[type] = typedLocations.length;
+      }
+      return counts;
     },
   },
 });

@@ -54,7 +54,7 @@
                  @click="handleLocationTypeSelect"
                  checked
           >
-          Election Day Voting Locations
+          Election Day Voting Locations <span class="badge badge-light">{{locationCount("polling-places")}}</span>
         </label>
         <label class="btn btn-primary"
         >
@@ -64,7 +64,7 @@
                  autocomplete="off"
                  @click="handleLocationTypeSelect"
           >
-          Early Voting Locations
+          Early Voting Locations <span class="badge badge-light">{{locationCount("early-voting-locations")}}</span>
         </label>
         <label class="btn btn-primary"
         >
@@ -74,7 +74,7 @@
                  autocomplete="off"
                  @click="handleLocationTypeSelect"
           >
-          Ballot Drop Boxes
+          Ballot Drop Boxes <span class="badge badge-light">{{locationCount("drop-boxes")}}</span>
         </label>
         <label class="btn btn-primary"
         >
@@ -84,7 +84,7 @@
                  autocomplete="off"
                  @click="handleLocationTypeSelect"
           >
-          Emergency Voting Locations
+          Emergency Voting Locations <span class="badge badge-light">{{locationCount("emergency-voting-locations")}}</span>
         </label>
       </div>
 
@@ -243,6 +243,9 @@ export default {
     handleLocationTypeSelect(e) {
       const locationType = e.target.id;
       this.$store.commit('setSelectedLocationType', locationType);
+    },
+    locationCount(type) {
+      return this.$store.getters.locationCounts[type];
     },
   },
 };
