@@ -103,24 +103,22 @@
             :key="location.id"
             class="list-group-item"
         >
-          <h4>{{ location.fields['Polling Location Name'] }}</h4>
+          <h4>{{ location.fields['Name'] }}</h4>
           <div>
-            <div>
-              <strong>
-                {{ location.fields['Name'] }}
-              </strong>
-            </div>
-            {{ location.fields['Street Address'] }},
+            {{ location.fields['Street Address'] }}            
+          </div>
+          <div>
             {{ location.fields['City'] }}, AZ
             {{ location.fields['ZIP Code'] }}
           </div>
+          <h6 class="mt-3 mb-0">Hours:</h6>
           <div>
             {{ location.fields['Dates'] }}
           </div>
           <div>
             {{ location.fields['Hours'] }}
-          </div>
-          <div>
+          </div>          
+          <div class="mt-3">
             <!-- TODO handle null lat/lng? -->
             <a :href="`https://www.google.com/maps/dir/?api=1&destination=${location.fields['Latitude']},${location.fields['Longitude']}`" target="_blank">
               Open in Google Maps
