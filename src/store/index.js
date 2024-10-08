@@ -94,6 +94,18 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    selectedLocationTypeLabel(state, getters) {
+      const { selectedLocationType } = state;
+      const counts = getters.locationCounts;
+      const label = LOCATION_TYPES_PRETTY_MAP[selectedLocationType].toLowerCase();
+      let suffix = 's';
+
+      if (selectedLocationType === 'drop-boxes') {
+        suffix = 'es';
+      }
+
+      return counts[selectedLocationType] === 1 ? label : label + suffix;
+    },
     locationsForSelectedType(state) {
       const { selectedLocationType } = state;
       const selectedLocationTypePretty = LOCATION_TYPES_PRETTY_MAP[selectedLocationType];

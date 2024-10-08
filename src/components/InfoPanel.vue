@@ -164,6 +164,9 @@ export default {
     selectedLocationType() {
       return this.$store.state.selectedLocationType;
     },
+    selectedLocationTypeLabel() {
+      return this.$store.getters.selectedLocationTypeLabel;
+    },  
     locations() {
       return this.$store.getters.locationsForSelectedType;
     },
@@ -197,19 +200,13 @@ export default {
       return locationsSorted;
     },
     resultsSummaryText() {
-      const { locations, selectedLocationType } = this;
-      let selectedLocationTypePretty = selectedLocationType.replace(/-/g, ' ');
-      const count = locations.length;
-
+      const count = this.locations.length;
+      
       if (count === 0) {
-        return `Sorry, we couldn't find any ${selectedLocationTypePretty} for your precinct.`;
+        return `Sorry, we couldn't find any ${this.selectedLocationTypeLabel} for your precinct.`;
       }
 
-      if (count === 1) {
-        selectedLocationTypePretty = selectedLocationTypePretty.replace(/s$/, '');
-      }
-
-      return `We found ${count} ${selectedLocationTypePretty}.`;
+      return `We found ${count} ${this.selectedLocationTypeLabel}.`;
     },
     locationTypeInfoHtml() {
       const { selectedLocationType } = this;
