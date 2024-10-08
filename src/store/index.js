@@ -61,7 +61,7 @@ export default new Vuex.Store({
       // airtable only returns 100 records per query, so do this in a loop
       /* eslint-disable no-await-in-loop */
       do {
-        const locationsUrl = new URL('https://api.airtable.com/v0/appT1HFWoS3zL6giD/tblx5urWEb4tqv9YI');
+        const locationsUrl = new URL('https://api.airtable.com/v0/appT1HFWoS3zL6giD/tblUsOXRKwYNmOmxo');
         const locationUrlParams = {
           filterByFormula: `AND({Latitude} != BLANK(), {Longitude} != BLANK(), {County} = "${county}", OR({Precinct Number} = "${precinctId}", {Precinct Number} = "All"), {Active} = 1)`,
         };

@@ -243,7 +243,7 @@ export default {
       // because of cross-origin frame restrictions. but, conveniently, all of
       // the sites this is currently embedded on set the iframe width to less
       // than 992, so we can assume a more mobile-ish viewport.
-      const padding = (this.isIframe || window.screen.width < 992) ? 100 : 200;
+      const padding = (this.isIframe || document.body.clientWidth < 992) ? 100 : 200;
       this.map.fitBounds(bounds, { padding });
     },
     didSearchWithGeocoder(e) {
