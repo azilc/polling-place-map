@@ -11,7 +11,7 @@ This project is a collaboration between the Arizona State University [Indian Leg
 yarn install
 ```
 
-Then create an .env.local file in the root directory and replace "YOUR_TOKEN" with a [personal access token](https://airtable.com/developers/web/guides/personal-access-tokens) that has the `data.records:read` scope.
+Then create an .env.local file in the root directory with the following line, replacing "YOUR_TOKEN" with a [personal access token](https://airtable.com/developers/web/guides/personal-access-tokens) that has the `data.records:read` scope.
 ```
 VUE_APP_AIRTABLE_BEARER_TOKEN=YOUR_TOKEN
 ```
