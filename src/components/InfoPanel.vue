@@ -29,6 +29,13 @@
       </h2>
     </div>
 
+    <!-- Display loading message while fetching locations -->
+    <div class="loading" v-if="selectedPoint && (!precinct || locations.status === 'loading')">
+      <h2>
+        ... Loading ...
+      </h2>
+    </div> 
+
     <div class="results" v-if="precinct">
       <h2>
         You selected {{ precinct.county }} County<span v-if="precinct.precinctId !== 'All'">, Precinct {{ precinct.precinctId }}</span>
