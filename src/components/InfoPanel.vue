@@ -31,7 +31,7 @@
 
     <div class="results" v-if="precinct">
       <h2>
-        You selected {{ precinct.county }} County, Precinct {{ precinct.precinctId }}
+        You selected {{ precinct.county }} County<span v-if="precinct.precinctId !== 'All'">, Precinct {{ precinct.precinctId }}</span>
       </h2>
       <p>
         <em>
@@ -54,7 +54,7 @@
                  @click="handleLocationTypeSelect"
                  checked
           >
-          Election Day Voting Locations
+          Election Day Voting Locations <span class="badge badge-light">{{locationCount("polling-places")}}</span>
         </label>
         <label class="btn btn-primary"
         >
@@ -64,7 +64,7 @@
                  autocomplete="off"
                  @click="handleLocationTypeSelect"
           >
-          Early Voting Locations
+          Early Voting Locations <span class="badge badge-light">{{locationCount("early-voting-locations")}}</span>
         </label>
         <label class="btn btn-primary"
         >
@@ -74,7 +74,7 @@
                  autocomplete="off"
                  @click="handleLocationTypeSelect"
           >
-          Ballot Drop Boxes
+          Ballot Drop Boxes <span class="badge badge-light">{{locationCount("drop-boxes")}}</span>
         </label>
         <label class="btn btn-primary"
         >
@@ -84,7 +84,7 @@
                  autocomplete="off"
                  @click="handleLocationTypeSelect"
           >
-          Emergency Voting Locations
+          Emergency Voting Locations <span class="badge badge-light">{{locationCount("emergency-voting-locations")}}</span>
         </label>
       </div>
 
@@ -103,24 +103,22 @@
             :key="location.id"
             class="list-group-item"
         >
-          <h4>{{ location.fields['Polling Location Name'] }}</h4>
+          <h4 :id="location.fields['Pseudo ID'].trim()">{{ location.fields['Name'] }}</h4>
           <div>
-            <div>
-              <strong>
-                {{ location.fields['Name'] }}
-              </strong>
-            </div>
-            {{ location.fields['Street Address'] }},
+            {{ location.fields['Street Address'] }}            
+          </div>
+          <div>
             {{ location.fields['City'] }}, AZ
             {{ location.fields['ZIP Code'] }}
           </div>
+          <h6 class="mt-3 mb-0">Hours:</h6>
           <div>
             {{ location.fields['Dates'] }}
           </div>
           <div>
             {{ location.fields['Hours'] }}
-          </div>
-          <div>
+          </div>          
+          <div class="mt-3">
             <!-- TODO handle null lat/lng? -->
             <a :href="`https://www.google.com/maps/dir/?api=1&destination=${location.fields['Latitude']},${location.fields['Longitude']}`" target="_blank">
               Open in Google Maps
@@ -166,6 +164,9 @@ export default {
     selectedLocationType() {
       return this.$store.state.selectedLocationType;
     },
+    selectedLocationTypeLabel() {
+      return this.$store.getters.selectedLocationTypeLabel;
+    },  
     locations() {
       return this.$store.getters.locationsForSelectedType;
     },
@@ -199,33 +200,27 @@ export default {
       return locationsSorted;
     },
     resultsSummaryText() {
-      const { locations, selectedLocationType } = this;
-      let selectedLocationTypePretty = selectedLocationType.replace(/-/g, ' ');
-      const count = locations.length;
-
+      const count = this.locations.length;
+      
       if (count === 0) {
-        return `Sorry, we couldn't find any ${selectedLocationTypePretty} for your precinct.`;
+        return `Sorry, we couldn't find any ${this.selectedLocationTypeLabel} for your precinct.`;
       }
 
-      if (count === 1) {
-        selectedLocationTypePretty = selectedLocationTypePretty.replace(/s$/, '');
-      }
-
-      return `We found ${count} ${selectedLocationTypePretty}.`;
+      return `We found ${count} ${this.selectedLocationTypeLabel}.`;
     },
     locationTypeInfoHtml() {
       const { selectedLocationType } = this;
       let html = '';
 
       if (selectedLocationType === 'polling-places') {
-        html = 'Vote in-person on Election Day: Tuesday, November 8 from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.';
+        html = `Vote in-person on Election Day: Tuesday, ${process.env.VUE_APP_ELECTION_DAY} from 6:00 AM to 7:00 PM. As long as you are in line before 7:00 PM, you will still be able to vote. Voter identification is required. Find out more about <a href="https://azsos.gov/elections/voting-election">what you need to bring to vote in person</a>. <hr />At these locations, you can also drop off the ballot you received by mail.`;
       } else if (selectedLocationType === 'early-voting-locations') {
-        html = 'Early voting ends has ended. If you cannot vote on November 8, you can vote on November 7 at an Emergency Voting Location.';
+        html = `Early voting ends ${process.env.VUE_APP_EARLY_VOTING_END_DATE}. If you cannot vote on ${process.env.VUE_APP_ELECTION_DAY}, you can vote on ${process.env.VUE_APP_DAY_BEFORE_ELECTION_DAY} at an Emergency Voting Location.`;
       } else if (selectedLocationType === 'drop-boxes') {
-        html = 'Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, November 8). You can also return them to any in-person voting locations during hours they are open.';
+        html = `Mail ballots can be returned at any drop box in your county until 7:00 PM on Election Day (Tuesday, ${process.env.VUE_APP_ELECTION_DAY}). You can also return them to any in-person voting locations during hours they are open.`;
       } else if (selectedLocationType === 'emergency-voting-locations') {
         html = `
-          On Monday, November 7, you can vote at
+          On Monday, ${process.env.VUE_APP_DAY_BEFORE_ELECTION_DAY}, you can vote at
           one of these emergency voting locations if something unexpected
           happens and you're no longer going to be able to vote on Election Day.
           Voter identification is required. Find out more about 
@@ -243,6 +238,9 @@ export default {
     handleLocationTypeSelect(e) {
       const locationType = e.target.id;
       this.$store.commit('setSelectedLocationType', locationType);
+    },
+    locationCount(type) {
+      return this.$store.getters.locationCounts[type];
     },
   },
 };

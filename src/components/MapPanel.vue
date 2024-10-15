@@ -123,7 +123,7 @@ export default {
 
       map.addSource('precincts', {
         type: 'vector',
-        url: 'mapbox://aznativevoteep.btrrgab8',
+        url: 'mapbox://aznativevoteep.2hi2fi60',
       });
       map.addLayer({
         id: 'precincts',
@@ -178,10 +178,8 @@ export default {
 
       // update precinct object in state
       const precinctFeature = precinctFeatures[0];
-      const countyPrecinctId = precinctFeature.properties.prec_code;
-      // TODO edge cases? make sure we only split on space before numeric (regex?)
-      const [county, precinctIdLeadingZero] = countyPrecinctId.replace('AZ_', '').split('_');
-      const precinctId = precinctIdLeadingZero.replace(/^0/, '');
+      const precinctId = precinctFeature.properties.precinct?.toString().replace(/^0/, '') || 'All';
+      const county = precinctFeature.properties.county;     
       const precinct = {
         county,
         precinctId,
@@ -217,9 +215,9 @@ export default {
         const lng = location.fields.Longitude;
         const lat = location.fields.Latitude;
 
-        // create popup
+        // create popup        
         const popup = new mapboxgl.Popup({ offset: 25 })
-          .setText(location.fields.Name);
+          .setHTML(`<strong>${location.fields.Name}<strong><br><a href="#${location.fields['Pseudo ID'].trim()}">get directions & hours</a>`);
 
         const marker = new mapboxgl.Marker({
           color: 'blue',
@@ -245,7 +243,7 @@ export default {
       // because of cross-origin frame restrictions. but, conveniently, all of
       // the sites this is currently embedded on set the iframe width to less
       // than 992, so we can assume a more mobile-ish viewport.
-      const padding = (this.isIframe || window.screen.width < 992) ? 100 : 200;
+      const padding = (this.isIframe || document.body.clientWidth < 992) ? 100 : 200;
       this.map.fitBounds(bounds, { padding });
     },
     didSearchWithGeocoder(e) {

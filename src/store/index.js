@@ -3,6 +3,13 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
+const LOCATION_TYPES_PRETTY_MAP = {
+  'polling-places': 'Polling Place',
+  'early-voting-locations': 'Early Voting Location',
+  'drop-boxes': 'Drop Box',
+  'emergency-voting-locations': 'Emergency Voting Location',
+};
+
 export default new Vuex.Store({
   state: {
     selectedPoint: null,
@@ -54,7 +61,7 @@ export default new Vuex.Store({
       // airtable only returns 100 records per query, so do this in a loop
       /* eslint-disable no-await-in-loop */
       do {
-        const locationsUrl = new URL('https://api.airtable.com/v0/appT1HFWoS3zL6giD/Locations');
+        const locationsUrl = new URL(`https://api.airtable.com/v0/appT1HFWoS3zL6giD/${process.env.VUE_APP_LOCATIONS_TABLE}`);
         const locationUrlParams = {
           filterByFormula: `AND({Latitude} != BLANK(), {Longitude} != BLANK(), {County} = "${county}", OR({Precinct Number} = "${precinctId}", {Precinct Number} = "All"), {Active} = 1)`,
         };
@@ -69,9 +76,7 @@ export default new Vuex.Store({
 
         const locationsRes = await fetch(locationsUrl, {
           headers: {
-            // note: this key is for a dummy, read-only airtable user
-            // sorry, hackers :P
-            Authorization: 'Bearer keyuJB9Hqg3p2tuCI',
+            Authorization: `Bearer ${process.env.VUE_APP_AIRTABLE_BEARER_TOKEN}`,
           },
         });
         const sourceLocationsData = await locationsRes.json();
@@ -87,21 +92,35 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    selectedLocationTypeLabel(state, getters) {
+      const { selectedLocationType } = state;
+      const counts = getters.locationCounts;
+      const label = LOCATION_TYPES_PRETTY_MAP[selectedLocationType].toLowerCase();
+      let suffix = 's';
+
+      if (selectedLocationType === 'drop-boxes') {
+        suffix = 'es';
+      }
+
+      return counts[selectedLocationType] === 1 ? label : label + suffix;
+    },
     locationsForSelectedType(state) {
       const { selectedLocationType } = state;
-
-      const LOCATION_TYPES_PRETTY_MAP = {
-        'polling-places': 'Polling Place',
-        'early-voting-locations': 'Early Voting Location',
-        'drop-boxes': 'Drop Box',
-        'emergency-voting-locations': 'Emergency Voting Location',
-      };
-
       const selectedLocationTypePretty = LOCATION_TYPES_PRETTY_MAP[selectedLocationType];
 
       return state.locations.data.filter((location) => {
         return location.fields['Location Type'] === selectedLocationTypePretty;
       });
+    },
+    locationCounts(state) {
+      const counts = {};
+      for (const type in LOCATION_TYPES_PRETTY_MAP) {
+        const typedLocations = state.locations.data.filter((location) => {
+          return location.fields['Location Type'] === LOCATION_TYPES_PRETTY_MAP[type];
+        });
+        counts[type] = typedLocations.length;
+      }
+      return counts;
     },
   },
 });
